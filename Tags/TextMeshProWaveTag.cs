@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace TextMeshProExtension.Tags {
+namespace Submodules.TextMeshPro_Extension.Tags {
     public class TextMeshProWaveTag :
      TextMeshProTag {
         // The necessary time for a full cycle. The higher the longer the animation will be

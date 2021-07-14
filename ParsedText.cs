@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using TextMeshProExtension.Tags;
+using Submodules.TextMeshPro_Extension.Tags;
 
-namespace TextMeshProExtension {
+namespace Submodules.TextMeshPro_Extension {
     public struct ParsedText {
         public string RawText { get; private set; }
         public List<TextMeshProTag> Tags { get; private set; }

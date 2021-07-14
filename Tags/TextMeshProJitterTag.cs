@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace TextMeshProExtension.Tags {
+namespace Submodules.TextMeshPro_Extension.Tags {
     public class TextMeshProJitterTag :
      TextMeshProTag {
         private float intensity;

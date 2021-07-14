@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using TextMeshProExtension.Tags;
+using Submodules.TextMeshPro_Extension.Tags;
 using TMPro;
 using UnityEngine;
 
-namespace TextMeshProExtension {
+namespace Submodules.TextMeshPro_Extension {
     public static class TextParser {
 
         #region Constants

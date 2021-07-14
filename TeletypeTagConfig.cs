@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace TextMeshProExtension {
+namespace Submodules.TextMeshPro_Extension {
     [CreateAssetMenu(menuName = "TMP Tags/TeletypeTagConfig")]
     public class TeletypeTagConfig : ScriptableObject {
 

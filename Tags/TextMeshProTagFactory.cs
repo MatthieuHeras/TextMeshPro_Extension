@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 
-namespace TextMeshProExtension.Tags {
+namespace Submodules.TextMeshPro_Extension.Tags {
     /// <summary>
     /// Factory that returns a TextMeshProTag depending on the name
     /// </summary>

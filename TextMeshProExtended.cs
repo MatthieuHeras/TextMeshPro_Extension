@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using TextMeshProExtension.Tags;
+using Submodules.TextMeshPro_Extension.Tags;
 using TMPro;
 using UnityEngine;
 
-namespace TextMeshProExtension {
+namespace Submodules.TextMeshPro_Extension {
     /// <summary>
     /// Component that animates a TextMeshPro component with custom beacons
     /// </summary>

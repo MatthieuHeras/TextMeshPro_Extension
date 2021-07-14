@@ -1,6 +1,6 @@
 ﻿using TMPro;
 
-namespace TextMeshProExtension.Tags {
+namespace Submodules.TextMeshPro_Extension.Tags {
     /// <summary>Base class for custom tags.</summary>
     public abstract class TextMeshProTag {
         public string TagName { get; }

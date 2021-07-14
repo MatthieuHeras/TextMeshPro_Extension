@@ -1,7 +1,6 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace TextMeshProExtension {
+namespace Submodules.TextMeshPro_Extension {
     public class TextMeshProAnimator : MonoBehaviour {
     }
 }

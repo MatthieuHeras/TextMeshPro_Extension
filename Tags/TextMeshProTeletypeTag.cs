@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace TextMeshProExtension.Tags {
+namespace Submodules.TextMeshPro_Extension.Tags {
     public class TextMeshProTeletypeTag : TextMeshProTag {
 
         #region parameters
