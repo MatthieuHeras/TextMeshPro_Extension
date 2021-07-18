@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Submodules.TextMeshPro_Extension.Tags {
     public class TextMeshProTeletypeTag : TextMeshProTag {
+        public override string TagName => TextMeshProTagFactory.Constants.TeletypeTagName;
 
         #region parameters
 
@@ -26,7 +27,7 @@ namespace Submodules.TextMeshPro_Extension.Tags {
         private Color32[] newVertexColors;
 
         private TextMeshProTeletypeTag(TMP_Text rawTextRef, int startIndex)
-            : base(rawTextRef, "teletype", startIndex) {
+            : base(rawTextRef, startIndex) {
             isDone = false;
         }
 
@@ -48,7 +49,7 @@ namespace Submodules.TextMeshPro_Extension.Tags {
                 speed = 10f,
                 delay = 0f,
                 spacing = 5,
-                isFading = true
+                isFading = false
             };
 
             foreach (KeyValuePair<string, string> parameter in parameters) {
@@ -88,7 +89,7 @@ namespace Submodules.TextMeshPro_Extension.Tags {
 
                 byte alpha = (byte) (isFading
                     ? 255 * Mathf.Clamp01((timeSinceBeginning - j * period / spacing) / period)
-                    : timeSinceBeginning > (j + 1) * period ? 255 : 0);
+                    : timeSinceBeginning > j * period ? 255 : 0);
                 
                 SetVertexAlpha(i, alpha);
             }

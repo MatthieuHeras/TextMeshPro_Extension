@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Experimental.Playables;
 
 namespace Submodules.TextMeshPro_Extension.Tags {
-    public class TextMeshProWaveTag :
-     TextMeshProTag {
+    public class TextMeshProWaveTag : TextMeshProTag {
+        public override string TagName => TextMeshProTagFactory.Constants.WaveTagName;
+
         // The necessary time for a full cycle. The higher the longer the animation will be
         private float period;
         
@@ -22,9 +24,12 @@ namespace Submodules.TextMeshPro_Extension.Tags {
         private float frequency;
         private float actualAmplitude;
         private float actualSpacing;
+
+        // We need to store the previous offsets to remove them when adding the new ones (we don't hard set the position of vertices)
+        private List<List<float>> previousOffsets;
         
-        private TextMeshProWaveTag(TMP_Text rawTextRef, int startIndex)
-            : base(rawTextRef, "wave", startIndex) {
+        private TextMeshProWaveTag(TMP_Text rawTextRef, int startIndex) 
+            : base(rawTextRef, startIndex) {
             actualAmplitude = 1f;
             frequency = 1f;
             actualSpacing = 2f;
@@ -56,20 +61,25 @@ namespace Submodules.TextMeshPro_Extension.Tags {
                         return false;
                 }
             }
+            
             return true;
         }
 
         public override void UpdateText(float time) {
             TMP_TextInfo textInfo = rawText.textInfo;
             for (int i = 0; i < textInfo.meshInfo.Length; i++) {
+                for (int j = startIndex * 4, previousIndex = 0; j < endIndex * 4; j += 2, previousIndex++) {
+                    Vector3 waveOffset = Vector3.up * (Mathf.Sin((offset + time) * frequency + j * 0.25f * actualSpacing / 2) * actualAmplitude);
+                    Vector3 previousOffset = Vector3.up * previousOffsets[i][previousIndex];
+                    Vector3 incrementOffset = waveOffset - previousOffset;
 
-                for (int j = startIndex * 4; j < endIndex * 4; j += 4) {
-                    Vector3 waveOffset = Vector3.up * (Mathf.Sin((offset + time) * frequency + j * 0.25f * actualSpacing) * actualAmplitude);
+                    // Move all the vertices together so the shape of the letter doesn't change.
+                    textInfo.meshInfo[i].vertices[j + 0] += incrementOffset;
+                    textInfo.meshInfo[i].vertices[j + 1] += incrementOffset;
+                    //textInfo.meshInfo[i].vertices[j + 2] += waveOffset - Vector3.up * previousOffsets[i][j];
+                    //textInfo.meshInfo[i].vertices[j + 3] += waveOffset - Vector3.up * previousOffsets[i][j];
 
-                    textInfo.meshInfo[i].vertices[j + 0] += waveOffset;
-                    textInfo.meshInfo[i].vertices[j + 1] += waveOffset;
-                    textInfo.meshInfo[i].vertices[j + 2] += waveOffset;
-                    textInfo.meshInfo[i].vertices[j + 3] += waveOffset;
+                    previousOffsets[i][previousIndex] = waveOffset.y;
                 }
             }
         }
@@ -79,6 +89,20 @@ namespace Submodules.TextMeshPro_Extension.Tags {
             actualAmplitude = rawText.fontSize * amplitude * 0.3f;
             frequency = 2f * Mathf.PI / period;
             actualSpacing = 2f * Mathf.PI / spacing;
+            
+            // Initialize the previous offsets.
+            TMP_TextInfo textInfo = rawText.textInfo;
+
+            previousOffsets = new List<List<float>>(textInfo.meshInfo.Length);
+            int indexRange = endIndex * 4 - startIndex * 4;
+            
+            for (int i = 0; i < textInfo.meshInfo.Length; i++) {
+                previousOffsets.Add(new List<float>(indexRange));
+                
+                for (int j = 0; j < (endIndex - startIndex) * 2; j++) {
+                    previousOffsets[i].Add(0f);
+                }
+            }
         }
     }
 }

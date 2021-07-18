@@ -3,8 +3,9 @@ using TMPro;
 using UnityEngine;
 
 namespace Submodules.TextMeshPro_Extension.Tags {
-    public class TextMeshProJitterTag :
-     TextMeshProTag {
+    public class TextMeshProJitterTag : TextMeshProTag {
+        public override string TagName => TextMeshProTagFactory.Constants.JitterTagName;
+        
         private float intensity;
 
         private float speed;
@@ -14,7 +15,7 @@ namespace Submodules.TextMeshPro_Extension.Tags {
         private List<Vector3> jitterVectors;
 
         private TextMeshProJitterTag(TMP_Text rawTextRef, int startIndex)
-            : base(rawTextRef, "jitter", startIndex) {
+            : base(rawTextRef, startIndex) {
         }
 
         public static bool TryGenerate(out TextMeshProJitterTag tag, TMP_Text rawTextRef, Dictionary<string, string> parameters, int startIndex) {

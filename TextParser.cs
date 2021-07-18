@@ -21,7 +21,7 @@ namespace Submodules.TextMeshPro_Extension {
         // examples : "1", "1.1", "984.16874", ...
 
         private const string BoolRegex = @"(true)|(false)";
-        // examples : "true", "false"
+        // examples : "true", "false".
 
         private const string IntRegex = @"[0-9]+";
         // examples : "2", "23818318165", ...
@@ -47,38 +47,6 @@ namespace Submodules.TextMeshPro_Extension {
         private static List<TextMeshProTag> tags = new List<TextMeshProTag>();
         private static List<TextMeshProTag> validatedTags = new List<TextMeshProTag>();
 
-
-        /// <summary>
-        /// Adds a given string to the output text.
-        /// Doesn't count the spaces for the animation index since the spaces aren't animated.
-        /// </summary>
-        /// <param name="addedText">The text to add to the output.</param>
-        /// <param name="incrementIndex">If the animation index must be incremented (not for TMP tags for example).</param>
-        private static void AddToOutputText(string addedText, bool incrementIndex) {
-            outputText += addedText;
-            if (incrementIndex)
-                foreach (char c in addedText)
-                    if (c != ' ')
-                        animationCurrentIndex++;
-        }
-
-        
-        /// <summary>Finish the initialization of the tag and add it to the tags to return.</summary>
-        private static void ValidateTag(TextMeshProTag tag) {
-            tag.SetLastIndex(animationCurrentIndex);
-            validatedTags.Add(tag);
-            tags.Remove(tag);
-        }
-
-        
-        /// <summary>Adds a part of the raw text to the output.</summary>
-        /// <param name="incrementIndex">If the animation index must be incremented (not for TMP tags for example).</param>
-        private static void AddRawTextToOutputText(int length, bool incrementIndex) {
-            AddToOutputText(rawText.Substring(0, length), incrementIndex);
-            rawText = rawText.Substring(length);
-        }
-
-        
         /// <summary>Parse a raw text into tags and the text without them.</summary>
         /// <param name="originalText">The raw text to parse.</param>
         /// <param name="tmpText">The reference to the TMP component.</param>
@@ -93,6 +61,7 @@ namespace Submodules.TextMeshPro_Extension {
 
             if (isDefaultTeletyped)
                 tags.Add(new TextMeshProTeletypeTag(tmpText, 10, 0, 1, false));
+            
             // With each iteration, we delete a part of the raw text and add it (or convert it into a tag) to the output
             while (rawText.Length > 0) {
                 // Is it a tag ?
@@ -110,6 +79,36 @@ namespace Submodules.TextMeshPro_Extension {
 
             // Return the parsed text
             return new ParsedText(outputText, validatedTags);
+        }
+
+        /// <summary>
+        /// Adds a given string to the output text.
+        /// Doesn't count the spaces for the animation index since the spaces aren't animated.
+        /// </summary>
+        /// <param name="addedText">The text to add to the output.</param>
+        /// <param name="incrementIndex">If the animation index must be incremented (not for TMP tags for example).</param>
+        private static void AddToOutputText(string addedText, bool incrementIndex) {
+            outputText += addedText;
+            if (incrementIndex)
+                foreach (char c in addedText)
+                    if (c != ' ')
+                        animationCurrentIndex++;
+        }
+
+
+        /// <summary>Finish the initialization of the tag and add it to the tags to return.</summary>
+        private static void ValidateTag(TextMeshProTag tag) {
+            tag.SetEndIndex(animationCurrentIndex);
+            validatedTags.Add(tag);
+            tags.Remove(tag);
+        }
+
+
+        /// <summary>Adds a part of the raw text to the output.</summary>
+        /// <param name="incrementIndex">If the animation index must be incremented (not for TMP tags for example).</param>
+        private static void AddRawTextToOutputText(int length, bool incrementIndex) {
+            AddToOutputText(rawText.Substring(0, length), incrementIndex);
+            rawText = rawText.Substring(length);
         }
 
 
@@ -155,7 +154,7 @@ namespace Submodules.TextMeshPro_Extension {
                 HandleOpeningTag(potentialTag, endIndex, tmpText);
         }
 
-        
+
         /// <summary>Deal with a closing tag "</...>".</summary>
         /// <param name="potentialTag">The content of the tag (without the angle brackets).</param>
         /// <param name="endIndex">The index of the end of the tag, used to add or remove it.</param>
@@ -173,27 +172,22 @@ namespace Submodules.TextMeshPro_Extension {
                 return;
             }
 
-            bool isValid = false;
-
             // Check if the name corresponds to a previously opened tag
             for (int i = tags.Count - 1; i >= 0; i--) {
                 // check if the tag name is the same
                 if (tags[i].TagName == potentialTag) {
                     ValidateTag(tags[i]);
                     rawText = rawText.Substring(endIndex + 1);
-                    isValid = true;
-                    break;
+                    return;
                 }
             }
 
             // It corresponds to nothing, we remove the tag from the raw text
-            if (!isValid) {
-                rawText = rawText.Substring(endIndex + 1);
-                Debug.LogWarning($"tag invalid : </{potentialTag}>");
-            }
+            rawText = rawText.Substring(endIndex + 1);
+            Debug.LogWarning($"tag invalid : </{potentialTag}>");
         }
 
-        
+
         /// <summary>Deal with an opening tag "<...>".</summary>
         /// <param name="potentialTag">The content of the tag (without the angle brackets).</param>
         /// <param name="endIndex">The index of the end of the tag, used to add or remove it.</param>
@@ -268,8 +262,7 @@ namespace Submodules.TextMeshPro_Extension {
             // The tag has a valid syntax
             if (isValidTag) {
                 // if the tag is valid
-                TextMeshProTag testTag =
-                    TextMeshProTagFactory.CreateTag(tagName, tmpText, tagParameters, animationCurrentIndex);
+                TextMeshProTag testTag = TextMeshProTagFactory.CreateTag(tagName, tmpText, tagParameters, animationCurrentIndex);
                 if (testTag != null) {
                     tags.Add(testTag);
                 }
