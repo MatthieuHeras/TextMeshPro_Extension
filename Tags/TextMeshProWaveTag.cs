@@ -1,22 +1,18 @@
 ﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Experimental.Playables;
 
 namespace Submodules.TextMeshPro_Extension.Tags {
     public class TextMeshProWaveTag : TextMeshProTag {
         public override string TagName => TextMeshProTagFactory.Constants.WaveTagName;
 
-        // The necessary time for a full cycle. The higher the longer the animation will be
+        // The necessary time for a full cycle. The higher the slower the animation will be
         private float period;
-        
         // The number of characters to have a full period. The higher the smoother the curve will be.
         private int spacing;
-        
         // The height of the wave, set it to 1 to have a one character height difference from top to bottom.
         private float amplitude;
-        
-        // The offset with which the curve starts. Set it to ...
+        // The offset with which the curve starts.
         private float offset;
 
 
@@ -76,8 +72,6 @@ namespace Submodules.TextMeshPro_Extension.Tags {
                     // Move all the vertices together so the shape of the letter doesn't change.
                     textInfo.meshInfo[i].vertices[j + 0] += incrementOffset;
                     textInfo.meshInfo[i].vertices[j + 1] += incrementOffset;
-                    //textInfo.meshInfo[i].vertices[j + 2] += waveOffset - Vector3.up * previousOffsets[i][j];
-                    //textInfo.meshInfo[i].vertices[j + 3] += waveOffset - Vector3.up * previousOffsets[i][j];
 
                     previousOffsets[i][previousIndex] = waveOffset.y;
                 }

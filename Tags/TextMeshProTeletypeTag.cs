@@ -9,11 +9,13 @@ namespace Submodules.TextMeshPro_Extension.Tags {
 
         #region parameters
 
-        // Number of characters displayed by second
+        // Number of characters displayed by second.
         private float speed;
+        // Only used if fading : the number of characters that are fading simultaneously.
         private int spacing;
+        // Whether the characters fade in or not.
         private bool isFading;
-        // Pause before starting the animation
+        // Pause before starting the animation.
         private float delay;
 
         #endregion
